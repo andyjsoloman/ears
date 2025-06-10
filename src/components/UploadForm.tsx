@@ -1,0 +1,111 @@
+"use client";
+
+import { useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+
+export default function UploadForm() {
+  const [title, setTitle] = useState("");
+  const [uploader, setUploader] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    null
+  );
+  const [uploading, setUploading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleGetLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setLocation({ lat: latitude, lng: longitude });
+      },
+      (err) => {
+        alert("Failed to get location");
+        console.error(err);
+      }
+    );
+  };
+
+  const handleUpload = async () => {
+    if (!file || !location) return alert("Missing file or location");
+
+    setUploading(true);
+    const fileExt = file.name.split(".").pop();
+    const filePath = `recordings/${Date.now()}.${fileExt}`;
+
+    const { data: storageData, error: storageError } = await supabase.storage
+      .from("recordings")
+      .upload(filePath, file);
+
+    if (storageError) {
+      alert("Upload failed");
+      console.error(storageError);
+      setUploading(false);
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("recordings")
+      .getPublicUrl(filePath);
+
+    const { error: dbError } = await supabase.from("recordings").insert({
+      title: title || "Untitled",
+      uploader_name: uploader || null,
+      lat: location.lat,
+      lng: location.lng,
+      file_url: publicUrlData.publicUrl,
+    });
+
+    if (dbError) {
+      alert("Database insert failed");
+      console.error(dbError);
+    } else {
+      setSuccess(true);
+    }
+
+    setUploading(false);
+  };
+
+  return (
+    <form
+      style={{
+        padding: "1rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      <label>
+        Title (optional)
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </label>
+      <label>
+        Uploader Name (optional)
+        <input
+          type="text"
+          value={uploader}
+          onChange={(e) => setUploader(e.target.value)}
+        />
+      </label>
+      <label>
+        Recording File
+        <input
+          type="file"
+          accept="audio/*"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        />
+      </label>
+      <button type="button" onClick={handleGetLocation}>
+        {location ? "Location Set ✅" : "Get Location"}
+      </button>
+      <button type="button" onClick={handleUpload} disabled={uploading}>
+        {uploading ? "Uploading..." : "Upload"}
+      </button>
+      {success && <p>✅ Upload complete!</p>}
+    </form>
+  );
+}
