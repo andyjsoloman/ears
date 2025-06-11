@@ -33,6 +33,7 @@ export default function UploadForm() {
     const fileExt = file.name.split(".").pop();
     const filePath = `recordings/${Date.now()}.${fileExt}`;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: storageData, error: storageError } = await supabase.storage
       .from("recordings")
       .upload(filePath, file);
