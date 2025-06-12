@@ -14,8 +14,8 @@ export default function MapPicker({ value, onChange }: Props) {
   const mapRef = useRef<MapRef | null>(null);
 
   const [viewport, setViewport] = useState({
-    latitude: value?.lat ?? 49.2827,
-    longitude: value?.lng ?? -123.1207,
+    latitude: value?.lat ?? 48.92547072322581,
+    longitude: value?.lng ?? -123.45522390529911,
     zoom: 10,
   });
 
@@ -53,7 +53,7 @@ export default function MapPicker({ value, onChange }: Props) {
         initialViewState={viewport}
         onMoveEnd={(e) => setViewport(e.viewState)} // only update when movement ends
         onClick={(e) => onChange({ lat: e.lngLat.lat, lng: e.lngLat.lng })}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapStyle="mapbox://styles/mapbox/outdoors-v12"
         style={{ width: "100%", height: "100%" }}
       >
         {value && <Marker latitude={value.lat} longitude={value.lng} />}

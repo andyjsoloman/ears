@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import UploadForm from "@/components/UploadForm";
+import UploadFormWrapper from "@/components/UploadFormWrapper";
 import UploadMap from "@/components/UploadMap";
 
 export default function UploadPage() {
@@ -33,7 +33,7 @@ export default function UploadPage() {
             boxShadow: "0 -2px 10px rgba(0,0,0,0.2)",
           }}
         >
-          <UploadForm location={selectedCoords} />
+          <UploadFormWrapper location={selectedCoords} />
         </div>
       )}
     </div>
