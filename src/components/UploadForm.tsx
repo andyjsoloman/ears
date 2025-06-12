@@ -3,28 +3,30 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function UploadForm() {
+type Props = {
+  location: { lat: number; lng: number } | null;
+};
+
+export default function UploadForm({ location }: Props) {
   const [title, setTitle] = useState("");
   const [uploader, setUploader] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
-    null
-  );
+
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleGetLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setLocation({ lat: latitude, lng: longitude });
-      },
-      (err) => {
-        alert("Failed to get location");
-        console.error(err);
-      }
-    );
-  };
+  //   const handleGetLocation = () => {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (pos) => {
+  //         const { latitude, longitude } = pos.coords;
+  //         setLocation({ lat: latitude, lng: longitude });
+  //       },
+  //       (err) => {
+  //         alert("Failed to get location");
+  //         console.error(err);
+  //       }
+  //     );
+  //   };
 
   const handleUpload = async () => {
     if (!file || !location) return alert("Missing file or location");
@@ -100,8 +102,8 @@ export default function UploadForm() {
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
       </label>
-      <button type="button" onClick={handleGetLocation}>
-        {location ? "Location Set ✅" : "Get Location"}
+      <button type="button" disabled>
+        Location: {location ? "✅ Set" : "❌ Not Set"}
       </button>
       <button type="button" onClick={handleUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload"}
