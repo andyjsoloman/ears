@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import mapBoundary from "../constants/mapBoundary";
+import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
+import { point, polygon } from "@turf/helpers";
 
 type Props = {
   location: { lat: number; lng: number } | null;
@@ -15,21 +18,18 @@ export default function UploadForm({ location }: Props) {
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  //   const handleGetLocation = () => {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (pos) => {
-  //         const { latitude, longitude } = pos.coords;
-  //         setLocation({ lat: latitude, lng: longitude });
-  //       },
-  //       (err) => {
-  //         alert("Failed to get location");
-  //         console.error(err);
-  //       }
-  //     );
-  //   };
+  const isWithinIsland = (lat: number, lng: number) => {
+    const pt = point([lng, lat]);
+    const poly = polygon(mapBoundary.features[0].geometry.coordinates);
+    return booleanPointInPolygon(pt, poly);
+  };
 
   const handleUpload = async () => {
     if (!file || !location) return alert("Missing file or location");
+
+    if (!isWithinIsland(location.lat, location.lng)) {
+      return alert("Upload location must be within the designated area.");
+    }
 
     setUploading(true);
     const fileExt = file.name.split(".").pop();

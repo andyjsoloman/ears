@@ -1,7 +1,15 @@
+"use client";
+
+import "./browse-globals.css";
+
+import { Canvas } from "@react-three/fiber";
+
+import Experience from "@/components/browse/Experience";
+
 export default function BrowsePage() {
   return (
-    <main>
-      <h1>Browse Recordings</h1>
-    </main>
+    <Canvas>
+      <Experience />
+    </Canvas>
   );
 }

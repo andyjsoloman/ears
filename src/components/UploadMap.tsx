@@ -1,9 +1,10 @@
 "use client";
 
-import Map, { Marker, MapRef } from "react-map-gl/mapbox";
+import Map, { Marker, MapRef, Source, Layer } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useRef, useState } from "react";
+import mapBoundary from "@/constants/mapBoundary";
 
 type Props = {
   value: { lat: number; lng: number } | null;
@@ -57,6 +58,18 @@ export default function MapPicker({ value, onChange }: Props) {
         style={{ width: "100%", height: "100%" }}
       >
         {value && <Marker latitude={value.lat} longitude={value.lng} />}
+        {mapBoundary && (
+          <Source id="boundary" type="geojson" data={mapBoundary}>
+            <Layer
+              id="boundary-layer"
+              type="fill"
+              paint={{
+                "fill-color": "#088",
+                "fill-opacity": 0.2,
+              }}
+            />
+          </Source>
+        )}
       </Map>
 
       <button
