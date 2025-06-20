@@ -13,7 +13,7 @@ export default function Marker(props) {
         receiveShadow
         geometry={nodes.Object_4.geometry}
         material={materials["Material.001"]}
-        scale={13}
+        scale={3}
       />
     </group>
   );

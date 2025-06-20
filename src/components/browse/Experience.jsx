@@ -1,12 +1,15 @@
 /* eslint-disable react/no-unknown-property */
 
 "use client";
+
 import { useThree, useFrame } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Environment } from "@react-three/drei";
 import { MapControls } from "three/addons/controls/MapControls.js";
 
+import { supabase } from "@/lib/supabaseClient";
+import { latLngToMapPosition } from "@/utils/latLngToMapPosition";
 import Ocean from "./Ocean";
 
 import Map from "./Map";
@@ -15,6 +18,7 @@ import Marker from "./Marker";
 function Experience() {
   const { scene, camera, gl } = useThree();
   const controls = useRef();
+  const [recordingPositions, setRecordingPositions] = useState([]);
 
   useEffect(() => {
     scene.fog = new THREE.FogExp2(0x0487e2, 0.0002);
@@ -53,6 +57,27 @@ function Experience() {
   // Update the controls on every frame
   useFrame(() => controls.current?.update());
 
+  // Fetch recordings
+  useEffect(() => {
+    const fetchRecordings = async () => {
+      const { data, error } = await supabase
+        .from("recordings")
+        .select("lat, lng");
+
+      if (error) {
+        console.error("Error fetching recordings:", error);
+        return;
+      }
+
+      const positions = data.map((rec) =>
+        latLngToMapPosition(rec.lat, rec.lng)
+      );
+      setRecordingPositions(positions);
+    };
+
+    fetchRecordings();
+  }, []);
+
   return (
     <>
       <Environment
@@ -73,6 +98,13 @@ function Experience() {
         groundColor={0x74ccf4}
         intensity={0.5}
       />
+      <axesHelper args={[500]} />
+      <mesh position={[0, 20, 0]}>
+        <boxGeometry args={[10, 10, 10]} />
+        <meshStandardMaterial color="red" />
+      </mesh>
+      <gridHelper args={[1035, 20, "white", "gray"]} position={[0, 100, 0]} />
+
       <Ocean />
       {/* <Shader /> */}
       {/* <mesh scale={200} position={[5, -20, 5]}>
@@ -80,11 +112,10 @@ function Experience() {
         <meshStandardMaterial />
       </mesh> */}
       <Map />
-      <Marker position={[-50, 40, 700]} />
-      <Marker position={[600, 50, -50]} />
-      <Marker position={[600, 50, -300]} />
-      <Marker position={[700, 50, -200]} />
-      <Marker position={[550, 50, -150]} />
+      {recordingPositions.map((pos, i) => (
+        <Marker key={i} position={pos} />
+      ))}
+      <Marker position={[0, 14.7, 0]} />
     </>
   );
 }
