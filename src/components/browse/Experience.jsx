@@ -11,6 +11,7 @@ import { MapControls } from "three/addons/controls/MapControls.js";
 import { supabase } from "@/lib/supabaseClient";
 import { latLngToMapPosition } from "@/utils/latLngToMapPosition";
 import Ocean from "./Ocean";
+import { tesMarkerPoints } from "@/constants/testMarkerPoints";
 
 import Map from "./Map";
 import Marker from "./Marker";
@@ -78,6 +79,11 @@ function Experience() {
     fetchRecordings();
   }, []);
 
+  //Test Marker Points
+  const testMarkerPositions = tesMarkerPoints.map(([lng, lat]) =>
+    latLngToMapPosition(lat, lng)
+  );
+
   return (
     <>
       <Environment
@@ -113,7 +119,10 @@ function Experience() {
       </mesh> */}
       <Map />
       {recordingPositions.map((pos, i) => (
-        <Marker key={i} position={pos} />
+        <Marker key={i} position={pos} scale={6} />
+      ))}
+      {testMarkerPositions.map((pos, i) => (
+        <Marker key={`test-${i}`} position={pos} />
       ))}
       <Marker position={[0, 14.7, 0]} />
     </>
