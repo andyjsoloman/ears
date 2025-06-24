@@ -3,7 +3,7 @@ import browseLimits from "@/utils/browseLimits";
 const { minLat, maxLat, minLng, maxLng } = browseLimits;
 
 // Projection dimensions
-const averageLat = (minLat + maxLat) / 2;
+// const averageLat = (minLat + maxLat) / 2;
 const latRange = maxLat - minLat;
 const lngRangeAdjusted =
   (maxLng - minLng) *
@@ -37,8 +37,8 @@ export function latLngToMapPosition(lat: number, lng: number) {
   const xNorm = lngAdjusted / lngRangeAdjusted;
   const zNorm = latToNormalizedMercator(lat);
 
-  let x = xNorm * MAP_WIDTH - MAP_WIDTH / 2 + MAP_OFFSET_X;
-  let z = zNorm * MAP_HEIGHT - MAP_HEIGHT / 2 + MAP_OFFSET_Z;
+  const x = xNorm * MAP_WIDTH - MAP_WIDTH / 2 + MAP_OFFSET_X;
+  const z = zNorm * MAP_HEIGHT - MAP_HEIGHT / 2 + MAP_OFFSET_Z;
   const y = 14.7;
 
   // Apply adjustable Y rotation

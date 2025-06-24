@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 export default function Map(props) {
   const { nodes, materials } = useGLTF("/map.gltf");
-  console.log("bounds", nodes.Map.geometry.boundingBox);
+  // console.log("bounds", nodes.Map.geometry.boundingBox);
 
   const meshRef = useRef();
 
@@ -17,9 +17,9 @@ export default function Map(props) {
       const box = new THREE.Box3().setFromObject(meshRef.current);
       const size = new THREE.Vector3();
       box.getSize(size);
-      console.log("Mesh size:", size);
-      console.log("Box min:", box.min);
-      console.log("Box max:", box.max);
+      // console.log("Mesh size:", size);
+      // console.log("Box min:", box.min);
+      // console.log("Box max:", box.max);
     }
   }, []);
 

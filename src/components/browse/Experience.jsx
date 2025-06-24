@@ -63,17 +63,19 @@ function Experience() {
     const fetchRecordings = async () => {
       const { data, error } = await supabase
         .from("recordings")
-        .select("lat, lng");
+        .select("id, title, file_url, uploader_name, lat, lng");
 
       if (error) {
         console.error("Error fetching recordings:", error);
         return;
       }
 
-      const positions = data.map((rec) =>
-        latLngToMapPosition(rec.lat, rec.lng)
-      );
-      setRecordingPositions(positions);
+      const recordingsWithPosition = data.map((rec) => ({
+        ...rec,
+        position: latLngToMapPosition(rec.lat, rec.lng),
+      }));
+
+      setRecordingPositions(recordingsWithPosition);
     };
 
     fetchRecordings();
@@ -118,9 +120,17 @@ function Experience() {
         <meshStandardMaterial />
       </mesh> */}
       <Map />
-      {recordingPositions.map((pos, i) => (
-        <Marker key={i} position={pos} scale={6} />
+      {recordingPositions.map((rec, i) => (
+        <Marker
+          key={rec.id || i}
+          position={rec.position}
+          scale={6}
+          onClick={() => {
+            console.log(rec); // Contains title, file_url, etc.
+          }}
+        />
       ))}
+
       {testMarkerPositions.map((pos, i) => (
         <Marker key={`test-${i}`} position={pos} />
       ))}
