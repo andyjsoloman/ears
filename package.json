@@ -12,6 +12,7 @@
     "@react-three/drei": "^10.3.0",
     "@react-three/fiber": "^9.1.2",
     "@supabase/supabase-js": "^2.50.0",
+    "@tanstack/react-query": "^5.81.2",
     "@turf/boolean-point-in-polygon": "^7.2.0",
     "framer-motion": "^12.17.0",
     "mapbox-gl": "^3.12.0",
@@ -19,6 +20,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "^8.0.4",
+    "styled-components": "^6.1.19",
     "three": "^0.177.0",
     "three-bvh-csg": "^0.0.17",
     "three-custom-shader-material": "^6.3.7"

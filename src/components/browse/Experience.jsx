@@ -8,18 +8,19 @@ import * as THREE from "three";
 import { Environment } from "@react-three/drei";
 import { MapControls } from "three/addons/controls/MapControls.js";
 
-import { supabase } from "@/lib/supabaseClient";
+import supabase from "@/lib/supabaseClient";
 import { latLngToMapPosition } from "@/utils/latLngToMapPosition";
 import Ocean from "./Ocean";
 import { tesMarkerPoints } from "@/constants/testMarkerPoints";
+import { useRecordings } from "@/recordings/useRecordings";
 
 import Map from "./Map";
 import Marker from "./Marker";
+import AudioPlayer from "./AudioPlayer";
 
 function Experience() {
   const { scene, camera, gl } = useThree();
   const controls = useRef();
-  const [recordingPositions, setRecordingPositions] = useState([]);
 
   useEffect(() => {
     scene.fog = new THREE.FogExp2(0x0487e2, 0.0002);
@@ -58,28 +59,13 @@ function Experience() {
   // Update the controls on every frame
   useFrame(() => controls.current?.update());
 
-  // Fetch recordings
-  useEffect(() => {
-    const fetchRecordings = async () => {
-      const { data, error } = await supabase
-        .from("recordings")
-        .select("id, title, file_url, uploader_name, lat, lng");
+  const { recordings, loadingRecordings, recordingsError } = useRecordings();
 
-      if (error) {
-        console.error("Error fetching recordings:", error);
-        return;
-      }
-
-      const recordingsWithPosition = data.map((rec) => ({
-        ...rec,
-        position: latLngToMapPosition(rec.lat, rec.lng),
-      }));
-
-      setRecordingPositions(recordingsWithPosition);
-    };
-
-    fetchRecordings();
-  }, []);
+  const recordingPositions =
+    recordings?.map((rec) => ({
+      ...rec,
+      position: latLngToMapPosition(rec.lat, rec.lng),
+    })) || [];
 
   //Test Marker Points
   const testMarkerPositions = tesMarkerPoints.map(([lng, lat]) =>
@@ -88,6 +74,7 @@ function Experience() {
 
   return (
     <>
+      <AudioPlayer />
       <Environment
         background
         files={"./kloppenheim_06_puresky_4k.hdr"}

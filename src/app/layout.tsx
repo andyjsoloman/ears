@@ -1,3 +1,6 @@
+import ReactQueryProvider from "@/components/ReactQueryProvider";
+import { CurrentlyPlayingProvider } from "../contexts/CurrentlyPlayingContext";
+
 export const metadata = {
   title: "E.A.R.S.",
   description: "A field recording archive",
@@ -10,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ReactQueryProvider>
+          <CurrentlyPlayingProvider>{children}</CurrentlyPlayingProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }
