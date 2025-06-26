@@ -13,14 +13,15 @@ import { latLngToMapPosition } from "@/utils/latLngToMapPosition";
 import Ocean from "./Ocean";
 import { tesMarkerPoints } from "@/constants/testMarkerPoints";
 import { useRecordings } from "@/recordings/useRecordings";
+import { useCurrentlyPlaying } from "@/contexts/CurrentlyPlayingContext";
 
 import Map from "./Map";
 import Marker from "./Marker";
-import AudioPlayer from "./AudioPlayer";
 
 function Experience() {
   const { scene, camera, gl } = useThree();
   const controls = useRef();
+  const { setCurrentRecording } = useCurrentlyPlaying();
 
   useEffect(() => {
     scene.fog = new THREE.FogExp2(0x0487e2, 0.0002);
@@ -74,7 +75,6 @@ function Experience() {
 
   return (
     <>
-      <AudioPlayer />
       <Environment
         background
         files={"./kloppenheim_06_puresky_4k.hdr"}
@@ -112,9 +112,7 @@ function Experience() {
           key={rec.id || i}
           position={rec.position}
           scale={6}
-          onClick={() => {
-            console.log(rec); // Contains title, file_url, etc.
-          }}
+          onClick={() => setCurrentRecording(rec)}
         />
       ))}
 

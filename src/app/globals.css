@@ -40,3 +40,20 @@ a {
     color-scheme: dark;
   }
 }
+
+html {
+  --color-primary: hsl(195 98% 25%);
+  --color-black: hsl(195, 59%, 9%);
+  --color-bg: hsl(195, 24%, 98%);
+  --color-grey: hsl(195, 5%, 80%);
+  --color-mdgrey: hsl(195, 5%, 60%);
+  --color-dkgrey: hsl(195, 13%, 24%);
+  --color-ltgrey: hsl(220, 14%, 96%);
+  --color-primary-hover: hsl(195, 100%, 13%);
+  --color-error-red: hsl(2, 80%, 47%);
+  --color-error-hover: hsl(2, 80%, 35%);
+  --backdrop-color: rgba(255, 255, 255, 0.1);
+
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
+    source-sans-pro, sans-serif;
+}

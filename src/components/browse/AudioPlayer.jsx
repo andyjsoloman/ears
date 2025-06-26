@@ -10,27 +10,31 @@ import { useRecordings } from "../../recordings/useRecordings";
 import { formatAudioTime } from "../../utils/useDateTime";
 import { QUERIES } from "../../constants/queries";
 const AudioContainer = styled.div`
-  width: 600px;
-  height: 120px;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: white;
+  border-radius: 12px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-
-  border-radius: 12px;
-  padding: 4px 12px 4px 40px;
-  margin: 20px 40px;
+  width: 800px;
+  height: 150px;
+  padding: 40px;
   display: flex;
-  gap: 12px;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 
   @media ${QUERIES.tablet} {
-    position: fixed;
+    position: absolute;
     width: 100%;
     z-index: 1000;
     bottom: 0;
     margin: 0;
     border-radius: 0;
-    background: var(--color-bg);
+    background: white;
     /* justify-content: center; */
     gap: 1.5rem;
   }
@@ -127,14 +131,9 @@ function AudioPlayer() {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
+  const [playbackError, setPlaybackError] = useState(null);
 
-  const { currentRecordingId } = useCurrentlyPlaying();
-
-  const {
-    loadingRecording,
-    recording: audioSrc,
-    recordingError,
-  } = useRecordings(null, currentRecordingId);
+  const { currentRecording } = useCurrentlyPlaying();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -155,11 +154,8 @@ function AudioPlayer() {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [audioSrc]);
+  }, [currentRecording]);
 
-  if (loadingRecording) return <p>Loading...</p>;
-  if (recordingError) return <p>Error loading audio</p>;
-  if (!audioSrc) return null;
   const togglePlayPause = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -201,13 +197,21 @@ function AudioPlayer() {
     setIsPlaying(false);
   };
 
-  if (!audioSrc) return null;
+  if (!currentRecording) return null;
+
+  if (playbackError) {
+    return (
+      <AudioContainer>
+        <p>{playbackError}</p>
+      </AudioContainer>
+    );
+  }
 
   return (
     <AudioContainer className="audio-player">
       <PlayButton togglePlayPause={togglePlayPause} isPlaying={isPlaying} />
       <InfoContainer>
-        <Title>{audioSrc.title}</Title>
+        <Title>{currentRecording.title}</Title>
         <DurationContainer>
           <span>{formatAudioTime(currentTime)}</span>
           <span>{formatAudioTime(duration)}</span>
@@ -230,7 +234,16 @@ function AudioPlayer() {
           handleMute={handleMute}
         />
       </VolumeContainer>
-      <audio autoPlay ref={audioRef} src={audioSrc.audio} onEnded={handleEnd} />
+      <audio
+        autoPlay
+        ref={audioRef}
+        src={currentRecording.file_url}
+        onEnded={handleEnd}
+        onError={() => {
+          setPlaybackError("Unable to load or play this audio file.");
+          setIsPlaying(false);
+        }}
+      />
     </AudioContainer>
   );
 }

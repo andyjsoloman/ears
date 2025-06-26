@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { QUERIES } from "../../constants/queries";
 
 const Container = styled.div`
-  width: 100%;
+  flex: 0 0 auto;
 
   @media ${QUERIES.tablet} {
     width: revert;

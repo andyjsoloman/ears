@@ -1,5 +1,6 @@
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { CurrentlyPlayingProvider } from "../contexts/CurrentlyPlayingContext";
+import "./globals.css";
 
 export const metadata = {
   title: "E.A.R.S.",

@@ -4,11 +4,11 @@ import { createContext, useContext, useState } from "react";
 const CurrentlyPlayingContext = createContext();
 
 export function CurrentlyPlayingProvider({ children }) {
-  const [currentRecordingId, setCurrentRecordingId] = useState(null);
+  const [currentRecording, setCurrentRecording] = useState(null);
 
   return (
     <CurrentlyPlayingContext.Provider
-      value={{ currentRecordingId, setCurrentRecordingId }}
+      value={{ currentRecording, setCurrentRecording }}
     >
       {children}
     </CurrentlyPlayingContext.Provider>
