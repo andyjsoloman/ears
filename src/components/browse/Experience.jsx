@@ -93,12 +93,9 @@ function Experience() {
         groundColor={0x74ccf4}
         intensity={0.5}
       />
-      <axesHelper args={[500]} />
-      <mesh position={[0, 20, 0]}>
-        <boxGeometry args={[10, 10, 10]} />
-        <meshStandardMaterial color="red" />
-      </mesh>
-      <gridHelper args={[1035, 20, "white", "gray"]} position={[0, 100, 0]} />
+      {/* <axesHelper args={[500]} /> */}
+
+      {/* <gridHelper args={[1035, 20, "white", "gray"]} position={[0, 100, 0]} /> */}
 
       <Ocean />
       {/* <Shader /> */}
@@ -111,6 +108,7 @@ function Experience() {
         <Marker
           key={rec.id || i}
           position={rec.position}
+          info={rec.title}
           scale={6}
           onClick={() => setCurrentRecording(rec)}
         />
@@ -119,7 +117,6 @@ function Experience() {
       {testMarkerPositions.map((pos, i) => (
         <Marker key={`test-${i}`} position={pos} />
       ))}
-      <Marker position={[0, 14.7, 0]} />
     </>
   );
 }

@@ -5,6 +5,62 @@ import supabase from "@/lib/supabaseClient";
 import mapBoundary from "../constants/mapBoundary";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { point, polygon } from "@turf/helpers";
+import styled from "styled-components";
+
+const Form = styled.form`
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+`;
+
+const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+`;
+
+const Input = styled.input`
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+
+  &:focus {
+    outline: 2px solid var(--color-primary, #0077ff);
+    border-color: transparent;
+  }
+`;
+
+const Button = styled.button<{ $secondary?: boolean }>`
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+  background: ${({ $secondary }) => ($secondary ? "#ddd" : "#0077ff")};
+  color: ${({ $secondary }) => ($secondary ? "#333" : "#fff")};
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  transition: background 0.2s;
+
+  &:hover {
+    background: ${({ $secondary }) => ($secondary ? "#ccc" : "#005ecc")};
+  }
+`;
+
+const Message = styled.p`
+  font-size: 0.95rem;
+  color: green;
+  margin-top: -0.5rem;
+`;
 
 type Props = {
   location: { lat: number; lng: number } | null;
@@ -70,7 +126,7 @@ export default function UploadForm({ location }: Props) {
   };
 
   return (
-    <form
+    <Form
       style={{
         padding: "1rem",
         display: "flex",
@@ -78,37 +134,37 @@ export default function UploadForm({ location }: Props) {
         gap: "1rem",
       }}
     >
-      <label>
+      <Label>
         Title (optional)
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Uploader Name (optional)
-        <input
+        <Input
           type="text"
           value={uploader}
           onChange={(e) => setUploader(e.target.value)}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Recording File
-        <input
+        <Input
           type="file"
           accept="audio/*"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
-      </label>
-      <button type="button" disabled>
+      </Label>
+      <Button type="button" disabled>
         Location: {location ? "✅ Set" : "❌ Not Set"}
-      </button>
-      <button type="button" onClick={handleUpload} disabled={uploading}>
+      </Button>
+      <Button type="button" onClick={handleUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload"}
-      </button>
+      </Button>
       {success && <p>✅ Upload complete!</p>}
-    </form>
+    </Form>
   );
 }

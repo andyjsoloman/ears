@@ -30,7 +30,8 @@
     "src/components/browse/Experience.jsx",
     "src/components/browse/Ocean.jsx",
     "src/components/browse/Marker.jsx",
-    "src/components/browse/Map.jsx"
+    "src/components/browse/Map.jsx",
+    "src/components/Button.jsx"
   ],
   "exclude": ["node_modules"]
 }

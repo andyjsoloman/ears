@@ -5,6 +5,15 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useRef, useState } from "react";
 import mapBoundary from "@/constants/mapBoundary";
+import styled from "styled-components";
+
+import Button from "./Button";
+import Modal from "./Modal";
+
+const Icon = styled.img`
+  width: 24px;
+  height: 24px;
+`;
 
 type Props = {
   value: { lat: number; lng: number } | null;
@@ -19,6 +28,8 @@ export default function MapPicker({ value, onChange }: Props) {
     longitude: value?.lng ?? -123.45522390529911,
     zoom: 10,
   });
+  const [showInitialModal, setShowInitialModal] = useState(true);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
@@ -48,6 +59,27 @@ export default function MapPicker({ value, onChange }: Props) {
 
   return (
     <div style={{ height: "100%", position: "relative" }}>
+      <Modal
+        isOpen={showInitialModal}
+        onClose={() => setShowInitialModal(false)}
+        usePortal
+      >
+        <h2>Welcome to E.A.R.S.</h2>
+        <p>
+          Pick a point on the map to select the loaction of your recording, or
+          tap the info button (top left) to find out more
+        </p>
+        <Button onClick={() => setShowInitialModal(false)}>Close</Button>
+      </Modal>
+      <Modal
+        isOpen={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
+        usePortal
+      >
+        <h2>More Information</h2>
+        <p>This project maps geolocated field recordings onto a 3D surface.</p>
+        <Button onClick={() => setShowInfoModal(false)}>Close</Button>
+      </Modal>
       <Map
         ref={mapRef}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
@@ -72,22 +104,34 @@ export default function MapPicker({ value, onChange }: Props) {
         )}
       </Map>
 
-      <button
+      <Button
         onClick={handleGetLocation}
         style={{
           position: "absolute",
           top: 10,
           right: 10,
           zIndex: 10,
-          padding: "0.5rem 1rem",
-          background: "#000",
-          color: "#fff",
-          border: "none",
-          borderRadius: "6px",
+          // padding: "0.5rem 1rem",
+          // background: "#000",
+          // color: "#fff",
+          // border: "none",
+          // borderRadius: "6px",
         }}
       >
         Get Location
-      </button>
+      </Button>
+
+      <Button
+        onClick={() => setShowInfoModal(true)}
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 10,
+          zIndex: 10,
+        }}
+      >
+        <Icon src="/infowhite.svg" alt="Play icon" />
+      </Button>
     </div>
   );
 }
