@@ -25,3 +25,8 @@ export async function getRecordingById(id) {
 
   return data;
 }
+
+export async function deleteRecording(id) {
+  const { error } = await supabase.from("recordings").delete().eq("id", id);
+  if (error) throw error;
+}

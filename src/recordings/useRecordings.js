@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getRecordings, getRecordingById } from "@/services/apiRecordings";
+import supabase from "../lib/supabaseClient";
 
 export function useRecordings(recordingId) {
   // Fetch all recordings
@@ -31,4 +32,38 @@ export function useRecordings(recordingId) {
     recording,
     recordingError,
   };
+}
+
+// Admin-specific: all recordings, sorted
+export function useAdminRecordings() {
+  return useQuery({
+    queryKey: ["admin-recordings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("recordings")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Supabase error:", error);
+        throw new Error("Failed to fetch admin recordings");
+      }
+      return data;
+    },
+  });
+}
+
+// Admin: delete recording and invalidate cache
+export function useDeleteRecording() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id) => {
+      const { error } = await supabase.from("recordings").delete().eq("id", id);
+      if (error) throw new Error("Failed to delete recording");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["admin-recordings"]);
+    },
+  });
 }

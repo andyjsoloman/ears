@@ -164,7 +164,7 @@ export default function UploadForm({ location }: Props) {
       <Button type="button" onClick={handleUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload"}
       </Button>
-      {success && <p>✅ Upload complete!</p>}
+      {success && <Message>✅ Upload complete!</Message>}
     </Form>
   );
 }
