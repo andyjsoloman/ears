@@ -2,7 +2,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getRecordings, getRecordingById } from "@/services/apiRecordings";
 import supabase from "../lib/supabaseClient";
 
-export function useRecordings(recordingId) {
+export function useRecordings(recordingId?: number) {
   // Fetch all recordings
   const {
     isLoading: loadingRecordings,
@@ -54,16 +54,17 @@ export function useAdminRecordings() {
 }
 
 // Admin: delete recording and invalidate cache
+
 export function useDeleteRecording() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (id) => {
+  return useMutation<void, Error, number>({
+    mutationFn: async (id: number) => {
       const { error } = await supabase.from("recordings").delete().eq("id", id);
       if (error) throw new Error("Failed to delete recording");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["admin-recordings"]);
+      queryClient.invalidateQueries({ queryKey: ["admin-recordings"] });
     },
   });
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { User } from "@supabase/supabase-js";
 import {
   useAdminRecordings,
   useDeleteRecording,
@@ -8,7 +9,13 @@ import {
 import supabase from "@/lib/supabaseClient";
 import styled from "styled-components";
 
-// Set the admin email you want to allow
+type Recording = {
+  id: number;
+  title: string;
+  file_url: string;
+  created_at: string;
+};
+
 const ADMIN_EMAIL = "andyjsoloman@gmail.com";
 
 const Page = styled.div`
@@ -73,7 +80,11 @@ export default function AdminPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [recordingToDelete, setRecordingToDelete] = useState<Recording | null>(
+    null
+  );
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -98,7 +109,7 @@ export default function AdminPage() {
     }
   };
 
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user?.email || user.email !== ADMIN_EMAIL) {
     return (
       <ModalOverlay>
         <ModalContent>
@@ -129,31 +140,76 @@ export default function AdminPage() {
   }
 
   return (
-    <Page>
-      <h1>Admin Panel: Recordings</h1>
-      {loadingRecordings && <p>Loading...</p>}
-      {recordingsError && <p>Error loading recordings</p>}
-      {recordings?.length === 0 && <p>No recordings found.</p>}
-      {recordings?.map((rec) => (
-        <RecordingItem key={rec.id}>
-          <Info>
-            <strong>{rec.title || "Untitled"}</strong>
-            <p>Uploaded: {new Date(rec.created_at).toLocaleString()}</p>
-          </Info>
-          <Controls>
-            <audio controls src={rec.file_url} />
-            <Button onClick={() => deleteRecording(rec.id)}>Delete</Button>
-          </Controls>
-        </RecordingItem>
-      ))}
-      <Button
-        onClick={async () => {
-          await supabase.auth.signOut();
-          window.location.reload(); // force reload to trigger login modal
-        }}
-      >
-        Logout
-      </Button>
-    </Page>
+    <>
+      <Page>
+        <h1>Admin Panel: Recordings</h1>
+        {loadingRecordings && <p>Loading...</p>}
+        {recordingsError && <p>Error loading recordings</p>}
+        {recordings?.length === 0 && <p>No recordings found.</p>}
+        {recordings?.map((rec) => (
+          <RecordingItem key={rec.id}>
+            <Info>
+              <strong>{rec.title || "Untitled"}</strong>
+              <p>Uploaded: {new Date(rec.created_at).toLocaleString()}</p>
+            </Info>
+            <Controls>
+              <audio controls src={rec.file_url} />
+              <Button
+                onClick={() => {
+                  setRecordingToDelete(rec);
+                  setShowConfirmModal(true);
+                }}
+              >
+                Delete
+              </Button>
+            </Controls>
+          </RecordingItem>
+        ))}
+        <Button
+          onClick={async () => {
+            await supabase.auth.signOut();
+            window.location.reload(); // force reload to trigger login modal
+          }}
+        >
+          Logout
+        </Button>
+      </Page>
+      {recordingToDelete && showConfirmModal && (
+        <ModalOverlay>
+          <ModalContent>
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete this recording?</p>
+            <p>
+              <strong>{recordingToDelete.title || "Untitled"}</strong>
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "1rem",
+              }}
+            >
+              <Button
+                onClick={() => {
+                  setShowConfirmModal(false);
+                  setRecordingToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  deleteRecording(recordingToDelete.id);
+                  setShowConfirmModal(false);
+                  setRecordingToDelete(null);
+                }}
+              >
+                Confirm
+              </Button>
+            </div>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
   );
 }

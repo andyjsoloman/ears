@@ -87,6 +87,7 @@ export default function UploadForm({ location }: Props) {
       return alert("Upload location must be within the designated area.");
     }
 
+    const start = performance.now();
     setUploading(true);
     const fileExt = file.name.split(".").pop();
     const filePath = `recordings/${Date.now()}.${fileExt}`;
@@ -114,6 +115,10 @@ export default function UploadForm({ location }: Props) {
       lng: location.lng,
       file_url: publicUrlData.publicUrl,
     });
+
+    const end = performance.now(); // End timing
+    const duration = ((end - start) / 1000).toFixed(2);
+    console.log(`✅ Upload and DB insert completed in ${duration} seconds`);
 
     if (dbError) {
       alert("Database insert failed");
