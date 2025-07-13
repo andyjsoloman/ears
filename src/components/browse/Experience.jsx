@@ -16,6 +16,7 @@ import { useRecordings } from "@/recordings/useRecordings";
 import { useCurrentlyPlaying } from "@/contexts/CurrentlyPlayingContext";
 
 import Map from "./Map";
+import ShaderPlane from "./ShaderPlane";
 import Marker from "./Marker";
 
 function Experience() {
