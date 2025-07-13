@@ -18,6 +18,7 @@ import { useCurrentlyPlaying } from "@/contexts/CurrentlyPlayingContext";
 import Map from "./Map";
 import ShaderPlane from "./ShaderPlane";
 import Marker from "./Marker";
+import YellowHouse from "./YellowHouse";
 
 function Experience() {
   const { scene, camera, gl } = useThree();
@@ -46,8 +47,8 @@ function Experience() {
     controls.current.maxDistance = 2000;
     controls.current.maxPolarAngle = Math.PI; // ✅ Allows full tilt (180 degrees)
     controls.current.mouseButtons = {
-      LEFT: THREE.MOUSE.PAN,
-      MIDDLE: THREE.MOUSE.ROTATE, // ✅ Middle mouse rotates
+      LEFT: THREE.MOUSE.ROTATE,
+      MIDDLE: THREE.MOUSE.PAN, // ✅ Middle mouse rotates
       RIGHT: THREE.MOUSE.DOLLY, // ✅ Right mouse zooms
     };
     controls.current.target.set(0, 70, 0);
@@ -110,14 +111,15 @@ function Experience() {
           key={rec.id || i}
           position={rec.position}
           info={rec.title}
-          scale={6}
+          scale={1}
           onClick={() => setCurrentRecording(rec)}
         />
       ))}
 
-      {testMarkerPositions.map((pos, i) => (
+      {/* {testMarkerPositions.map((pos, i) => (
         <Marker key={`test-${i}`} position={pos} />
-      ))}
+      ))} */}
+      <YellowHouse position={[600, 35, -320]} />
     </>
   );
 }
