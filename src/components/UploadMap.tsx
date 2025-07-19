@@ -3,6 +3,9 @@
 import Map, { Marker, MapRef, Source, Layer } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import { windsorBold } from "@/styles/fonts";
+import { windsorRegular } from "@/styles/fonts";
+
 import { useRef, useState } from "react";
 import mapBoundary from "@/constants/mapBoundary";
 import styled from "styled-components";
@@ -13,6 +16,19 @@ import Modal from "./Modal";
 const Icon = styled.img`
   width: 24px;
   height: 24px;
+`;
+
+const Heading = styled.h1.attrs(() => ({
+  className: windsorBold.className,
+}))`
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+`;
+
+const BodyText = styled.p.attrs(() => ({
+  className: windsorRegular.className,
+}))`
+  font-size: 1rem;
 `;
 
 type Props = {
@@ -64,11 +80,11 @@ export default function MapPicker({ value, onChange }: Props) {
         onClose={() => setShowInitialModal(false)}
         usePortal
       >
-        <h2>Welcome to E.A.R.S.</h2>
-        <p>
+        <Heading>Welcome to E.A.R.S.</Heading>
+        <BodyText>
           Pick a point on the map to select the loaction of your recording, or
           tap the info button (top left) to find out more
-        </p>
+        </BodyText>
         <Button onClick={() => setShowInitialModal(false)}>Close</Button>
       </Modal>
       <Modal
@@ -76,8 +92,10 @@ export default function MapPicker({ value, onChange }: Props) {
         onClose={() => setShowInfoModal(false)}
         usePortal
       >
-        <h2>More Information</h2>
-        <p>This project maps geolocated field recordings onto a 3D surface.</p>
+        <Heading>More Information</Heading>
+        <BodyText>
+          This project maps geolocated field recordings onto a 3D surface.
+        </BodyText>
         <Button onClick={() => setShowInfoModal(false)}>Close</Button>
       </Modal>
       <Map

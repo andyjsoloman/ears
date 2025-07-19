@@ -3,6 +3,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+
 import UploadForm from "./UploadForm";
 
 type Props = {

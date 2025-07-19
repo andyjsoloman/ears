@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { windsorBold } from "@/styles/fonts";
 
-const StyledButton = styled.button`
+const StyledButton = styled.button.attrs(() => ({
+  className: windsorBold.className,
+}))`
   padding: 10px 16px;
   font-size: 1.2rem;
   border-radius: 8px;

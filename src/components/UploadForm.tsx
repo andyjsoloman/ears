@@ -6,6 +6,9 @@ import mapBoundary from "../constants/mapBoundary";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { point, polygon } from "@turf/helpers";
 import styled from "styled-components";
+import { windsorRegular } from "@/styles/fonts";
+import { windsorBold } from "@/styles/fonts";
+import Button from "./Button";
 
 const Form = styled.form`
   max-width: 480px;
@@ -19,11 +22,13 @@ const Form = styled.form`
   gap: 1.25rem;
 `;
 
-const Label = styled.label`
+const Label = styled.label.attrs(() => ({
+  className: windsorRegular.className,
+}))`
   display: flex;
   flex-direction: column;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1rem;
   gap: 0.5rem;
 `;
 
@@ -39,20 +44,21 @@ const Input = styled.input`
   }
 `;
 
-const Button = styled.button<{ $secondary?: boolean }>`
+const UploadButton = styled(Button).attrs(() => ({
+  className: windsorBold.className,
+}))`
+  justify-content: center;
   padding: 0.75rem 1rem;
   font-size: 1rem;
   font-weight: 600;
   border-radius: 6px;
   border: none;
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
-  background: ${({ $secondary }) => ($secondary ? "#ddd" : "#0077ff")};
-  color: ${({ $secondary }) => ($secondary ? "#333" : "#fff")};
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   transition: background 0.2s;
 
   &:hover {
-    background: ${({ $secondary }) => ($secondary ? "#ccc" : "#005ecc")};
+    background: #005ecc;
   }
 `;
 
@@ -163,12 +169,12 @@ export default function UploadForm({ location }: Props) {
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
       </Label>
-      <Button type="button" disabled>
+      <UploadButton disabled onClick={() => {}}>
         Location: {location ? "✅ Set" : "❌ Not Set"}
-      </Button>
-      <Button type="button" onClick={handleUpload} disabled={uploading}>
+      </UploadButton>
+      <UploadButton type="button" onClick={handleUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload"}
-      </Button>
+      </UploadButton>
       {success && <Message>✅ Upload complete!</Message>}
     </Form>
   );
