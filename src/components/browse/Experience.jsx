@@ -43,7 +43,7 @@ function Experience() {
     controls.current.rotateSpeed = 1.0; // ✅ Adjust rotation speed
     controls.current.panSpeed = 1.0; // ✅ Adjust panning speed
     controls.current.zoomSpeed = 1.2;
-    controls.current.minDistance = 10;
+    // controls.current.minDistance = 10;
     controls.current.maxDistance = 2000;
     controls.current.maxPolarAngle = Math.PI; // ✅ Allows full tilt (180 degrees)
     controls.current.mouseButtons = {
@@ -119,7 +119,7 @@ function Experience() {
       {/* {testMarkerPositions.map((pos, i) => (
         <Marker key={`test-${i}`} position={pos} />
       ))} */}
-      <YellowHouse position={[600, 35, -320]} />
+      <YellowHouse position={[555, 35, -330]} />
     </>
   );
 }

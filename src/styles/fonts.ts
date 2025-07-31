@@ -10,7 +10,7 @@ export const windsorBold = localFont({
 
 export const windsorRegular = localFont({
   src: "../fonts/windsorprorg-webfont.woff",
-  weight: "400",
+  weight: "500",
   style: "normal",
   variable: "--font-windsor-regular",
 });

@@ -31,6 +31,28 @@ const BodyText = styled.p.attrs(() => ({
   font-size: 1rem;
 `;
 
+const PageIndicatorRow = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+`;
+
+const PageButtons = styled.div`
+  display: flex;
+
+  gap: 5rem;
+  margin-top: 1rem;
+`;
+
+const PageIndicatorDot = styled.div<{ active: boolean }>`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: ${({ active }) => (active ? "#333" : "#ccc")};
+  transition: background-color 0.3s;
+`;
+
 type Props = {
   value: { lat: number; lng: number } | null;
   onChange: (coords: { lat: number; lng: number }) => void;
@@ -46,6 +68,23 @@ export default function MapPicker({ value, onChange }: Props) {
   });
   const [showInitialModal, setShowInitialModal] = useState(true);
   const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const infoPages = [
+    {
+      heading: "About the Project",
+      body: "This project maps geolocated field recordings onto a 3D surface surface surface surface surface surface surface surface.",
+    },
+    {
+      heading: "How to Contribute",
+      body: "To add your own recording, choose a point on the map and follow the upload steps.",
+    },
+    {
+      heading: "Data Use",
+      body: "All data is public domain. Please ensure your recordings are field recordings, not commercial music or private conversations.",
+    },
+  ];
+
+  const [infoPageIndex, setInfoPageIndex] = useState(0);
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
@@ -89,15 +128,49 @@ export default function MapPicker({ value, onChange }: Props) {
       </Modal>
       <Modal
         isOpen={showInfoModal}
-        onClose={() => setShowInfoModal(false)}
+        onClose={() => {
+          setShowInfoModal(false);
+          setInfoPageIndex(0); // Reset on close
+        }}
         usePortal
       >
-        <Heading>More Information</Heading>
-        <BodyText>
-          This project maps geolocated field recordings onto a 3D surface.
-        </BodyText>
-        <Button onClick={() => setShowInfoModal(false)}>Close</Button>
+        <Heading>{infoPages[infoPageIndex].heading}</Heading>
+        <BodyText>{infoPages[infoPageIndex].body}</BodyText>
+
+        <PageIndicatorRow>
+          {infoPages.map((_, index) => (
+            <PageIndicatorDot key={index} active={index === infoPageIndex} />
+          ))}
+        </PageIndicatorRow>
+
+        <PageButtons>
+          <Button
+            onClick={() => setInfoPageIndex((i) => Math.max(i - 1, 0))}
+            disabled={infoPageIndex === 0}
+          >
+            <Icon src="/arrow-circle-left-white.svg" alt="Previous" />
+          </Button>
+          <Button
+            onClick={() =>
+              setInfoPageIndex((i) => Math.min(i + 1, infoPages.length - 1))
+            }
+            disabled={infoPageIndex === infoPages.length - 1}
+          >
+            <Icon src="/arrow-circle-right-white.svg" alt="Next" />
+          </Button>
+        </PageButtons>
+
+        <Button
+          onClick={() => {
+            setShowInfoModal(false);
+            setInfoPageIndex(0);
+          }}
+          style={{ marginTop: "1rem" }}
+        >
+          Close
+        </Button>
       </Modal>
+
       <Map
         ref={mapRef}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
