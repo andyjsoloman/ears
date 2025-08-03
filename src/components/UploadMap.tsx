@@ -25,6 +25,25 @@ const Heading = styled.h1.attrs(() => ({
   margin-bottom: 1rem;
   text-align: center;
 `;
+const SubHeading = styled.h2.attrs(() => ({
+  className: windsorBold.className,
+}))`
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+`;
+const StepList = styled.ol.attrs(() => ({
+  className: windsorRegular.className,
+}))`
+  padding-left: 1.25rem;
+  margin: 0;
+`;
+
+const StepItem = styled.li.attrs(() => ({
+  className: windsorRegular.className,
+}))`
+  margin-bottom: 0.75rem;
+`;
 
 const BodyText = styled.p.attrs(() => ({
   className: windsorRegular.className,
@@ -145,6 +164,19 @@ export default function MapPicker({ value, onChange }: Props) {
           Pick a point on the map to select the loaction of your recording, or
           tap the info button (top left) to find out more
         </BodyText>
+        <SubHeading>Tip:</SubHeading>
+        <BodyText>
+          If you&apos;re using iOS, you may need to save your voice memo to the
+          Files app before uploading.
+        </BodyText>
+        <StepList>
+          <StepItem> Open the Voice Memos app</StepItem>
+          <StepItem> Tap the ••• next to your recording</StepItem>
+          <StepItem> Choose &quot;Save to Files&quot;</StepItem>
+          <StepItem>
+            Return here and upload the file from the Files app
+          </StepItem>
+        </StepList>
         <Button onClick={() => setShowInitialModal(false)}>Close</Button>
       </Modal>
       <Modal
