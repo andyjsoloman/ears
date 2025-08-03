@@ -31,6 +31,13 @@ const BodyText = styled.p.attrs(() => ({
 }))`
   font-size: 1rem;
 `;
+const EmailText = styled.p.attrs(() => ({
+  className: windsorRegular.className,
+}))`
+  font-size: 1rem;
+  color: #0070f3;
+  margin: 1rem 0;
+`;
 
 const PageIndicatorRow = styled.div`
   display: flex;
@@ -69,6 +76,7 @@ export default function MapPicker({ value, onChange }: Props) {
   });
   const [showInitialModal, setShowInitialModal] = useState(true);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const infoPages = [
     {
@@ -134,6 +142,24 @@ export default function MapPicker({ value, onChange }: Props) {
           tap the info button (top left) to find out more
         </BodyText>
         <Button onClick={() => setShowInitialModal(false)}>Close</Button>
+      </Modal>
+      <Modal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        usePortal
+      >
+        <Heading>Feedback</Heading>
+        <BodyText>
+          We&apos;d love to hear your thoughts on this project. Contact us
+          though the email address below:
+        </BodyText>
+
+        <EmailText>
+          <a href="mailto:ears.activepassive@gmail.com">
+            ears.activepassive@gmail.com
+          </a>
+        </EmailText>
+        <Button onClick={() => setShowFeedbackModal(false)}>Close</Button>
       </Modal>
       <Modal
         isOpen={showInfoModal}
@@ -231,6 +257,17 @@ export default function MapPicker({ value, onChange }: Props) {
         }}
       >
         <Icon src="/infowhite.svg" alt="Play icon" />
+      </Button>
+      <Button
+        onClick={() => setShowFeedbackModal(true)}
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 80,
+          zIndex: 10,
+        }}
+      >
+        <Icon src="/chat-white.svg" alt="Play icon" />
       </Button>
     </div>
   );
