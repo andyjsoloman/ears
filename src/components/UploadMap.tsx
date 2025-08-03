@@ -97,7 +97,11 @@ export default function MapPicker({ value, onChange }: Props) {
     },
     {
       heading: "",
-      body: "Inherent within EARS’s encouragement of sonic reciprocity is the awareness and recognition that practices and philosophies such as Deep Listening and Acoustic Ecology are in many ways colonial settler interpretations of Indigenous ways of relating with the world. As such E.A.R.S. would like to acknowledge with the utmost respect the fundamental ways that traditional indigenous knowledge systems have been and continue to be appropriated, exploited and oppressed. We seek to (and encourage other settler participants to) be gracious, humble and respectful guests on the shared, stolen, unceded, ancestral and traditional territories of Penelakut, Lamalcha, Hwitslum and other Hul’qumi’num and SENĆOŦEN speaking peoples, as well as the ceded territories of Tsawwassen First Nation, on what is now known as Galiano Island",
+      body: "Inherent within EARS’s encouragement of sonic reciprocity is the awareness and recognition that practices and philosophies such as Deep Listening and Acoustic Ecology are in many ways colonial settler interpretations of Indigenous ways of relating with the world. As such E.A.R.S. would like to acknowledge with the utmost respect the fundamental ways that traditional indigenous knowledge systems have been and continue to be appropriated, exploited and oppressed.",
+    },
+    {
+      heading: "",
+      body: "We seek to (and encourage other settler participants to) be gracious, humble and respectful guests on the shared, stolen, unceded, ancestral and traditional territories of Penelakut, Lamalcha, Hwitslum and other Hul’qumi’num and SENĆOŦEN speaking peoples, as well as the ceded territories of Tsawwassen First Nation, on what is now known as Galiano Island",
     },
   ];
 
