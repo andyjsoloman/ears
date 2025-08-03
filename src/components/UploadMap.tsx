@@ -267,7 +267,7 @@ export default function MapPicker({ value, onChange }: Props) {
           zIndex: 10,
         }}
       >
-        <Icon src="/chat-white.svg" alt="Play icon" />
+        <Icon src="/chat-white.svg" alt="Feedback icon" />
       </Button>
     </div>
   );
