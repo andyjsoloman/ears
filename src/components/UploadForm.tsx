@@ -76,6 +76,7 @@ export default function UploadForm({ location }: Props) {
   const [title, setTitle] = useState("");
   const [uploader, setUploader] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [description, setDescription] = useState("");
 
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -120,6 +121,7 @@ export default function UploadForm({ location }: Props) {
       lat: location.lat,
       lng: location.lng,
       file_url: publicUrlData.publicUrl,
+      description: description || null,
     });
 
     const end = performance.now(); // End timing
@@ -161,6 +163,22 @@ export default function UploadForm({ location }: Props) {
           onChange={(e) => setUploader(e.target.value)}
         />
       </Label>
+      <Label>
+        Description (optional - context, time of day etc.)
+        <Input
+          as="textarea"
+          rows={3}
+          value={description}
+          onChange={(e) => {
+            const words = e.target.value.trim().split(/\s+/);
+            if (words.length <= 40) setDescription(e.target.value);
+          }}
+        />
+        <small>
+          {description.trim().split(/\s+/).filter(Boolean).length}/40 words
+        </small>
+      </Label>
+
       <Label>
         Recording File
         <Input

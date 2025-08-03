@@ -7,7 +7,6 @@ const VolumeIcon = styled.div`
   height: 100%;
   color: var(--color-primary);
   display: flex;
-  justify-content: flex-end;
 `;
 
 const RangeInput = styled.input.attrs({ type: "range" })`
@@ -52,13 +51,15 @@ const RangeInput = styled.input.attrs({ type: "range" })`
   }
 
   transform: rotate(-90deg);
-  width: 60px;
+  width: 100px;
   height: 80px;
   margin-bottom: 40px;
+  margin-left: -20px;
 `;
 
 const VolumeIconContainer = styled.div`
   cursor: pointer;
+  margin-left: -20px;
 `;
 
 const VolumeControl = ({ handleVolumeChange, volume, handleMute }) => {

@@ -23,6 +23,7 @@ const Heading = styled.h1.attrs(() => ({
 }))`
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  text-align: center;
 `;
 
 const BodyText = styled.p.attrs(() => ({
@@ -71,16 +72,24 @@ export default function MapPicker({ value, onChange }: Props) {
 
   const infoPages = [
     {
-      heading: "About the Project",
-      body: "This project maps geolocated field recordings onto a 3D surface surface surface surface surface surface surface surface.",
+      heading: "Eco Acoustic Relativity Station (E.A.R.S.)",
+      body: "E.A.R.S. is an interactive sound map that invites participants to deepen their perceptual relativity to the sonic landscapes of Galiano Island and Active Passive Festival.",
+    },
+    {
+      heading: "",
+      body: "E.A.R.S. seeks to explore how deeply listening to the soundscape of a place can influence our perception of time, space, and sense of belonging by sharing personal and collective sonic experiences over the duration of the festival",
     },
     {
       heading: "How to Contribute",
-      body: "To add your own recording, choose a point on the map and follow the upload steps.",
+      body: "Select a point on the map to mark the location of your recording, and upload using the form that appears. ",
     },
     {
-      heading: "Data Use",
-      body: "All data is public domain. Please ensure your recordings are field recordings, not commercial music or private conversations.",
+      heading: "Record Respectfully",
+      body: "When contributing to E.A.R.S., please ensure that your recordings are respectful of the environment and the community. Avoid capturing private conversations or sensitive locations without permission.",
+    },
+    {
+      heading: "",
+      body: "Inherent within EARS’s encouragement of sonic reciprocity is the awareness and recognition that practices and philosophies such as Deep Listening and Acoustic Ecology are in many ways colonial settler interpretations of Indigenous ways of relating with the world. As such E.A.R.S. would like to acknowledge with the utmost respect the fundamental ways that traditional indigenous knowledge systems have been and continue to be appropriated, exploited and oppressed. We seek to (and encourage other settler participants to) be gracious, humble and respectful guests on the shared, stolen, unceded, ancestral and traditional territories of Penelakut, Lamalcha, Hwitslum and other Hul’qumi’num and SENĆOŦEN speaking peoples, as well as the ceded territories of Tsawwassen First Nation, on what is now known as Galiano Island",
     },
   ];
 

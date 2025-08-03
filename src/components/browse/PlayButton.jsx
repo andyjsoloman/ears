@@ -5,6 +5,7 @@ import { QUERIES } from "../../constants/queries";
 
 const Container = styled.div`
   flex: 0 0 auto;
+  padding: 0.5rem;
 
   @media ${QUERIES.tablet} {
     width: revert;

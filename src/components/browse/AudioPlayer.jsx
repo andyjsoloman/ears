@@ -9,6 +9,9 @@ import VolumeControl from "./VolumeControl";
 import { useRecordings } from "../../recordings/useRecordings";
 import { formatAudioTime } from "../../utils/useDateTime";
 import { QUERIES } from "../../constants/queries";
+import { windsorRegular } from "@/styles/fonts";
+import { windsorBold } from "@/styles/fonts";
+
 const AudioContainer = styled.div`
   position: absolute;
   top: 20px;
@@ -20,12 +23,12 @@ const AudioContainer = styled.div`
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   width: 800px;
-  height: 150px;
-  padding: 40px;
+
+  padding: 12px 20px 20px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 32px;
 
   @media ${QUERIES.tablet} {
     position: absolute;
@@ -51,9 +54,7 @@ const InfoContainer = styled.div`
 
 const ProgressContainer = styled.div`
   display: flex;
-  @media ${QUERIES.tablet} {
-    flex-grow: 1;
-  }
+  justify-content: center;
 `;
 
 const ProgressBar = styled.input.attrs({ type: "range" })`
@@ -97,8 +98,8 @@ const ProgressBar = styled.input.attrs({ type: "range" })`
     border-radius: 4px;
   }
 
-  width: 400px;
-  margin-top: 12px;
+  width: 500px;
+  margin-top: 20px;
   margin-bottom: 24px;
   @media ${QUERIES.tablet} {
     width: 100%;
@@ -114,14 +115,34 @@ const VolumeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 40%;
+  justify-content: center;
 `;
 
-const Title = styled.h4`
+const Title = styled.h3.attrs(() => ({
+  className: windsorBold.className,
+}))`
   display: flex;
   justify-content: center;
-  margin-bottom: 8px;
-  margin-top: 24px;
+  margin-bottom: 4px;
+  margin-top: 12px;
+`;
+
+const Name = styled.h4.attrs(() => ({
+  className: windsorBold.className,
+}))`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  margin-top: 4px;
+`;
+
+const Description = styled.p.attrs(() => ({
+  className: windsorRegular.className,
+}))`
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
 `;
 
 function AudioPlayer() {
@@ -212,6 +233,9 @@ function AudioPlayer() {
       <PlayButton togglePlayPause={togglePlayPause} isPlaying={isPlaying} />
       <InfoContainer>
         <Title>{currentRecording.title}</Title>
+        <Name>{currentRecording.uploader_name}</Name>
+        <Description>{currentRecording.description}</Description>
+
         <DurationContainer>
           <span>{formatAudioTime(currentTime)}</span>
           <span>{formatAudioTime(duration)}</span>
