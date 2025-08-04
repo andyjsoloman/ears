@@ -20,6 +20,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  z-index: 1000;
 `;
 
 const Label = styled.label.attrs(() => ({
@@ -145,6 +146,7 @@ export default function UploadForm({ location }: Props) {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
+        zIndex: 1000,
       }}
     >
       <Label>

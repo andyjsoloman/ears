@@ -22,14 +22,14 @@ const Heading = styled.h1.attrs(() => ({
   className: windsorBold.className,
 }))`
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   text-align: center;
 `;
 const SubHeading = styled.h2.attrs(() => ({
   className: windsorBold.className,
 }))`
   font-size: 1rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0rem;
   text-align: center;
 `;
 const StepList = styled.ol.attrs(() => ({

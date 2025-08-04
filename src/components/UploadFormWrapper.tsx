@@ -33,6 +33,7 @@ export default function UploadFormWrapper({ location, onClose }: Props) {
         borderTopLeftRadius: "1rem",
         borderTopRightRadius: "1rem",
         boxShadow: "0 -2px 10px rgba(0,0,0,0.2)",
+        zIndex: 100,
       }}
     >
       <button
