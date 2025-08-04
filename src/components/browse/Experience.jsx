@@ -38,20 +38,22 @@ function Experience() {
     controls.current = new MapControls(camera, gl.domElement);
     controls.current.enableDamping = true;
     controls.current.dampingFactor = 0.1;
-    controls.current.screenSpacePanning = true; // ✅ Allow free movement (tilt/pan)
-    controls.current.enableRotate = true; // ✅ Enable rotation
-    controls.current.rotateSpeed = 1.0; // ✅ Adjust rotation speed
-    controls.current.panSpeed = 1.0; // ✅ Adjust panning speed
+    controls.current.screenSpacePanning = true;
+    controls.current.enableRotate = true;
+    controls.current.rotateSpeed = 0.5;
+    controls.current.enablePan = true;
+    controls.current.panSpeed = 1;
     controls.current.zoomSpeed = 1.2;
     // controls.current.minDistance = 10;
-    controls.current.maxDistance = 2000;
-    controls.current.maxPolarAngle = Math.PI; // ✅ Allows full tilt (180 degrees)
+    controls.current.maxDistance = 10000;
+    controls.current.maxPolarAngle = Math.PI; // Allows full tilt (180 degrees)
     controls.current.mouseButtons = {
       LEFT: THREE.MOUSE.ROTATE,
-      MIDDLE: THREE.MOUSE.PAN, // ✅ Middle mouse rotates
-      RIGHT: THREE.MOUSE.DOLLY, // ✅ Right mouse zooms
+      MIDDLE: THREE.MOUSE.PAN, //  Middle mouse rotates
+      RIGHT: THREE.MOUSE.DOLLY, // Right mouse zooms
     };
     controls.current.target.set(0, 70, 0);
+
     controls.current.update();
 
     return () => {
@@ -60,7 +62,15 @@ function Experience() {
   }, [scene, camera, gl]);
 
   // Update the controls on every frame
-  useFrame(() => controls.current?.update());
+  useFrame(() => {
+    if (controls.current) {
+      controls.current.update();
+
+      const t = controls.current.target;
+      t.x = THREE.MathUtils.clamp(t.x, -5000, 5000);
+      t.z = THREE.MathUtils.clamp(t.z, -5000, 5000);
+    }
+  });
 
   const { recordings, loadingRecordings, recordingsError } = useRecordings();
 
@@ -74,6 +84,16 @@ function Experience() {
   const testMarkerPositions = tesMarkerPoints.map(([lng, lat]) =>
     latLngToMapPosition(lat, lng)
   );
+
+  const resetView = () => {
+    if (controls.current && camera) {
+      camera.position.set(1000, 500, 0);
+      controls.current.target.set(0, 70, 0);
+
+      // Must call this to update internals of the control system
+      controls.current.update();
+    }
+  };
 
   return (
     <>
