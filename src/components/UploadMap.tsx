@@ -280,7 +280,7 @@ export default function MapPicker({ value, onChange }: Props) {
           // borderRadius: "6px",
         }}
       >
-        Get Location
+        GeoLocate
       </Button>
 
       <Button
