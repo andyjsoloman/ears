@@ -161,7 +161,7 @@ export default function MapPicker({ value, onChange }: Props) {
       >
         <Heading>Welcome to E.A.R.S.</Heading>
         <BodyText>
-          Pick a point on the map to select the loaction of your recording, or
+          Pick a point on the map to select the location of your recording, or
           tap the info button (top left) to find out more
         </BodyText>
         <SubHeading>Tip:</SubHeading>
