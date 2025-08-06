@@ -130,7 +130,10 @@ function Experience() {
         <Marker
           key={rec.id || i}
           position={rec.position}
-          info={rec.title}
+          info={{
+            title: rec.title,
+            uploader: rec.uploader_name || "Anonymous",
+          }}
           scale={1}
           onClick={() => setCurrentRecording(rec)}
         />

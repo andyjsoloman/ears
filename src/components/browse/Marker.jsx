@@ -1,7 +1,10 @@
 import { useGLTF, Html } from "@react-three/drei";
 import { useState } from "react";
 
-export default function Marker({ info = "Recording", ...props }) {
+export default function Marker({
+  info = { title: "Recording", uploader: "Unknown" },
+  ...props
+}) {
   const { nodes, materials } = useGLTF("/marker.gltf");
   const [hovered, setHovered] = useState(false);
 
@@ -40,7 +43,11 @@ export default function Marker({ info = "Recording", ...props }) {
               fontSize: "0.8rem",
             }}
           >
-            {info}
+            <strong>{info.title}</strong>
+            <br />
+            <span style={{ fontStyle: "italic", fontSize: "0.7rem" }}>
+              by {info.uploader}
+            </span>
           </div>
         </Html>
       )}
