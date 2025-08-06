@@ -49,7 +49,7 @@ export default function UploadFormWrapper({ location, onClose }: Props) {
         }}
         aria-label="Close"
       >
-        <Icon src="/x-circle-blue.svg" alt="Close Form" />
+        <Icon src="/x-circle-p-blue.svg" alt="Close Form" />
       </button>
       {location && <UploadForm location={location} />}
     </motion.div>

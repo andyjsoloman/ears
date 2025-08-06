@@ -6,11 +6,13 @@ import { useCurrentlyPlaying } from "../../contexts/CurrentlyPlayingContext";
 import styled from "styled-components";
 import PlayButton from "./PlayButton";
 import VolumeControl from "./VolumeControl";
+import Button from "../Button";
 import { useRecordings } from "../../recordings/useRecordings";
 import { formatAudioTime } from "../../utils/useDateTime";
 import { QUERIES } from "../../constants/queries";
 import { windsorRegular } from "@/styles/fonts";
 import { windsorBold } from "@/styles/fonts";
+import { color } from "framer-motion";
 
 const AudioContainer = styled.div`
   position: absolute;
@@ -145,6 +147,11 @@ const Description = styled.p.attrs(() => ({
   margin-bottom: 24px;
 `;
 
+const Icon = styled.img`
+  width: 32px;
+  height: 32px;
+`;
+
 function AudioPlayer() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -154,7 +161,7 @@ function AudioPlayer() {
   const [isMuted, setIsMuted] = useState(false);
   const [playbackError, setPlaybackError] = useState(null);
 
-  const { currentRecording } = useCurrentlyPlaying();
+  const { currentRecording, setCurrentRecording } = useCurrentlyPlaying();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -218,6 +225,10 @@ function AudioPlayer() {
     setIsPlaying(false);
   };
 
+  const handleClose = () => {
+    setCurrentRecording(null);
+  };
+
   if (!currentRecording) return null;
 
   if (playbackError) {
@@ -268,6 +279,19 @@ function AudioPlayer() {
           setIsPlaying(false);
         }}
       />
+      <Button
+        onClick={handleClose}
+        style={{
+          position: "relative",
+          right: "40px",
+          background: "transparent",
+          color: "black",
+          cursor: "pointer",
+          zIndex: 10,
+        }}
+      >
+        <Icon src="/x-circle-p-blue.svg" alt="Close Form" />
+      </Button>
     </AudioContainer>
   );
 }
