@@ -175,7 +175,7 @@ export default function MapPicker({ value, onChange }: Props) {
           <StepItem> Tap the ••• next to your recording</StepItem>
           <StepItem>
             {" "}
-            Choose &quot;Share&quot;,&quot;Save to Files&quot;
+            Choose &quot;Share&quot;, &quot;Save to Files&quot;
           </StepItem>
           <StepItem>
             Return here and upload the file from the Files app
