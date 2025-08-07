@@ -49,6 +49,7 @@ const BodyText = styled.p.attrs(() => ({
   className: windsorRegular.className,
 }))`
   font-size: 1rem;
+  color: black;
 `;
 const EmailText = styled.p.attrs(() => ({
   className: windsorRegular.className,

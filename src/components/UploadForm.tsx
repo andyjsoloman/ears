@@ -185,7 +185,7 @@ export default function UploadForm({ location }: Props) {
         Recording File
         <Input
           type="file"
-          accept="audio/*"
+          accept="audio/*, audio/mp4, .m4a"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
       </Label>
