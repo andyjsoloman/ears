@@ -173,7 +173,10 @@ export default function MapPicker({ value, onChange }: Props) {
         <StepList>
           <StepItem> Open the Voice Memos app</StepItem>
           <StepItem> Tap the ••• next to your recording</StepItem>
-          <StepItem> Choose &quot;Save to Files&quot;</StepItem>
+          <StepItem>
+            {" "}
+            Choose &quot;Share&quot;,&quot;Save to Files&quot;
+          </StepItem>
           <StepItem>
             Return here and upload the file from the Files app
           </StepItem>
