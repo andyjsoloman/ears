@@ -24,6 +24,11 @@ const Dialog = styled.div`
   gap: 1rem;
   max-width: 500px;
   width: 80%;
+  color: #000; /* <-- ensure black text on white panel */
+  color-scheme: light; /* <-- avoid auto dark adjustments */
+  -webkit-font-smoothing: auto; /* <-- undo global smoothing */
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 `;
 
 export default function Modal({
