@@ -19,7 +19,7 @@ export default function BrowsePage() {
         onClick={handleResetView}
         style={{
           position: "absolute",
-          bottom: "1.5rem",
+          bottom: "3rem",
           right: "1.5rem",
           zIndex: 10,
           padding: "0.5rem 1rem",
