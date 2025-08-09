@@ -32,7 +32,7 @@ export default function Marker({
         scale={3}
       />
       {hovered && (
-        <Html distanceFactor={500} position={[0, 20, 0]} center>
+        <Html distanceFactor={500} position={[0, 60, 0]} center>
           <div
             style={{
               background: "white",
