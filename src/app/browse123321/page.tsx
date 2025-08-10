@@ -1,7 +1,7 @@
 "use client";
 
 import "./browse-globals.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import Experience from "@/components/browse/Experience";
 import AudioPlayer from "@/components/browse/AudioPlayer";
@@ -12,6 +12,16 @@ export default function BrowsePage() {
   const handleResetView = () => {
     setExperienceKey((prev) => prev + 1); // Changing key will remount <Experience />
   };
+
+  // e.g. in a useEffect in a top-level client component
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(() => console.log("Service Worker registered"))
+        .catch((err) => console.error("SW registration failed", err));
+    }
+  }, []);
 
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
