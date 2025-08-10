@@ -162,6 +162,29 @@ function AudioPlayer() {
   const [playbackError, setPlaybackError] = useState(null);
 
   const { currentRecording, setCurrentRecording } = useCurrentlyPlaying();
+  // add near top of component
+  const [audioKey, setAudioKey] = useState(0); // to force remounts if needed
+
+  const handleRetry = () => {
+    const el = audioRef.current;
+    if (!el || !currentRecording) return;
+
+    setPlaybackError(null);
+    setIsPlaying(false);
+
+    // Option A: hard reset the same element
+    try {
+      el.pause();
+      el.src = ""; // break any stuck network pipeline
+      el.load();
+      el.src = currentRecording.file_url; // if you have signed URLs, refresh here
+      el.load();
+      el.play().catch(() => {}); // OK if autoplay blocked; user just tapped Retry
+    } catch (e) {
+      // Option B fallback: force React to remount the <audio> element
+      setAudioKey((k) => k + 1);
+    }
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -229,20 +252,6 @@ function AudioPlayer() {
     setCurrentRecording(null);
   };
 
-  const handleRetry = () => {
-    const audio = audioRef.current;
-    if (!audio || !currentRecording) return;
-
-    setPlaybackError(null); // clear error message
-    audio.pause();
-    audio.src = ""; // clear src to break any stuck network state
-    audio.load();
-
-    audio.src = currentRecording.file_url; // reload same file
-    audio.load();
-    audio.play().catch(() => {}); // ignore autoplay errors
-  };
-
   if (!currentRecording) return null;
 
   if (playbackError) {
@@ -286,15 +295,27 @@ function AudioPlayer() {
         />
       </VolumeContainer>
       <audio
+        key={audioKey} // allows remount if needed
         autoPlay
         ref={audioRef}
+        preload="auto"
+        crossOrigin="anonymous"
         src={currentRecording.file_url}
         onEnded={handleEnd}
+        onStalled={() => {
+          // stalls behave like soft errors on flaky networks
+          setPlaybackError("Connection stalled.");
+          setIsPlaying(false);
+        }}
         onError={() => {
           setPlaybackError("Unable to load or play this audio file.");
           setIsPlaying(false);
+
+          // Optional: try 1 automatic retry after a short delay
+          setTimeout(() => handleRetry(), 1200);
         }}
       />
+
       <Button
         onClick={handleClose}
         style={{
