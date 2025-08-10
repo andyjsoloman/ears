@@ -229,12 +229,28 @@ function AudioPlayer() {
     setCurrentRecording(null);
   };
 
+  const handleRetry = () => {
+    const audio = audioRef.current;
+    if (!audio || !currentRecording) return;
+
+    setPlaybackError(null); // clear error message
+    audio.pause();
+    audio.src = ""; // clear src to break any stuck network state
+    audio.load();
+
+    audio.src = currentRecording.file_url; // reload same file
+    audio.load();
+    audio.play().catch(() => {}); // ignore autoplay errors
+  };
+
   if (!currentRecording) return null;
 
   if (playbackError) {
     return (
       <AudioContainer>
         <p>{playbackError}</p>
+        <Button onClick={handleRetry}>Retry</Button>
+        <Button onClick={handleClose}>Close</Button>
       </AudioContainer>
     );
   }
