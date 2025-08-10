@@ -160,10 +160,23 @@ function AudioPlayer() {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [playbackError, setPlaybackError] = useState(null);
+  const [lastProgressTs, setLastProgressTs] = useState(Date.now());
 
   const { currentRecording, setCurrentRecording } = useCurrentlyPlaying();
   // add near top of component
   const [audioKey, setAudioKey] = useState(0); // to force remounts if needed
+
+  const makeSrc = () => {
+    try {
+      const u = new URL(currentRecording.file_url);
+      u.searchParams.set("_t", String(Date.now()));
+      return u.toString();
+    } catch {
+      return `${currentRecording.file_url}${
+        currentRecording.file_url.includes("?") ? "&" : "?"
+      }_t=${Date.now()}`;
+    }
+  };
 
   const handleRetry = () => {
     const el = audioRef.current;
@@ -172,16 +185,14 @@ function AudioPlayer() {
     setPlaybackError(null);
     setIsPlaying(false);
 
-    // Option A: hard reset the same element
     try {
       el.pause();
-      el.src = ""; // break any stuck network pipeline
+      el.src = "";
       el.load();
-      el.src = currentRecording.file_url; // if you have signed URLs, refresh here
+      el.src = makeSrc(); // 👈 use cache-busted URL
       el.load();
-      el.play().catch(() => {}); // OK if autoplay blocked; user just tapped Retry
-    } catch (e) {
-      // Option B fallback: force React to remount the <audio> element
+      el.play().catch(() => {});
+    } catch {
       setAudioKey((k) => k + 1);
     }
   };
@@ -196,7 +207,10 @@ function AudioPlayer() {
       setIsPlaying(true);
       audio.play();
     };
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      setLastProgressTs(Date.now()); // 👈 add this
+    };
 
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("timeupdate", handleTimeUpdate);
@@ -303,9 +317,13 @@ function AudioPlayer() {
         src={currentRecording.file_url}
         onEnded={handleEnd}
         onStalled={() => {
-          // stalls behave like soft errors on flaky networks
-          setPlaybackError("Connection stalled.");
+          // show a soft message first
+          setPlaybackError((m) => m ?? "Buffering…");
           setIsPlaying(false);
+
+          // if no progress for >10s, then do a hard retry
+          const since = Date.now() - (lastProgressTs || 0);
+          if (since > 10000) setTimeout(handleRetry, 800);
         }}
         onError={() => {
           setPlaybackError("Unable to load or play this audio file.");
